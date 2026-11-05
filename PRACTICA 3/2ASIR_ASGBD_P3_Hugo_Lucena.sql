@@ -21,10 +21,14 @@ SET GLOBAL wait_timeout = 3600;
 CREATE ROLE 'rol_consultor'; 
 
 /*2. Concesión de privilegios al rol: Otorga al rol rol_consultor permisos de solo lectura sobre toda la base de datos tienda_informatica.*/
-
+GRANT SELECT ON tienda_informatica.* TO 'rol_consultor';
+-- Todas las tablas de la BD (tienda_informatica.*) tienen permiso de lectura (GRANT SELECT) para los usuarios del rol 'rol_consultor'
 
 /*3. Asignación y rol por defecto: Asigna el rol rol_consultor al usuario auditor_externo y configúralo explícitamente como rol por defecto para su sesión de trabajo.*/
-
+GRANT 'rol_consultor' TO 'auditor_externo'@'%';
+-- Asignar el rol a el usuario
+ALTER USER 'auditor_externo'@'%' DEFAULT ROLE 'rol_consultor';
+-- Asignar rol por defecto a un usuario
 
 /*Tarea 3: Seguridad mediante Vistas y Privilegios Granulares
 Para proteger la información interna y confidencial de la empresa, el usuario gestor_tienda bajo ningún concepto debe tener acceso directo a la tabla completa de técnicos. Se debe proceder de la siguiente manera:*/
