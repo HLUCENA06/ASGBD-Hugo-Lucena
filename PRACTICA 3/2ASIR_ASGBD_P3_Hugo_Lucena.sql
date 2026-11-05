@@ -4,16 +4,24 @@ Continuando con la administración de la base de datos tienda_informatica, el de
 
 /*Tarea 1: Creación de usuarios y políticas de conexión y caducidad*/
 /*1. Creación de cuentas base: Crea un usuario llamado gestor_tienda que únicamente pueda conectarse desde la máquina local con la contraseña segura (explica qué requisitos estableces para que la contraseña sea segura). Crea un segundo usuario llamado auditor_externo que pueda conectarse desde cualquier dirección IP de la red.*/
+CREATE USER 'gestor_tienda'@'localhost' IDENTIFIED BY 'Gest2026!';
+CREATE USER 'auditor_externo'@'%' IDENTIFIED BY 'Ext2026!';
+-- localhost es para que el usuario sea unicamente local y el % es para que se pueda conectar desde fuera. La contraseña de cada uno es segura porque tienen mayusculas, minusculas, numeros y simbolos
 
 /*2. Directiva de caducidad de credenciales: Configura el usuario auditor_externo para que su contraseña caduque obligatoriamente cada 30 días, obligándole a reestablecerla pasado dicho plazo para evitar vulnerabilidades por credenciales estáticas.*/
+ALTER USER 'auditor_externo'@'%' PASSWORD EXPIRE INTERVAL 30 DAY;
+-- El usuario si o si debera modificar la contraseña tras 30 dias (PASSWORD EXPIRE INTERVAL)
 
 /*3. Directiva de control de sesión: Establece una restricción técnica para que las conexiones activas del usuario gestor_tienda no puedan superar 1 hora de inactividad o tiempo de vida activo, forzando la reautenticación tras dicho periodo.*/
-
+SET GLOBAL wait_timeout = 3600;
+-- Tiene que ser si o si para todos los usuarios. Se mide en segundos (3600s = 1hora)
 
 /*Tarea 2: Creación y asignación de roles*/
 /*1. Definición de rol operativo: Crea un rol denominado rol_consultor.*/
+CREATE ROLE 'rol_consultor'; 
 
 /*2. Concesión de privilegios al rol: Otorga al rol rol_consultor permisos de solo lectura sobre toda la base de datos tienda_informatica.*/
+
 
 /*3. Asignación y rol por defecto: Asigna el rol rol_consultor al usuario auditor_externo y configúralo explícitamente como rol por defecto para su sesión de trabajo.*/
 
