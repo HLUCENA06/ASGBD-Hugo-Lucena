@@ -47,6 +47,12 @@ GRANT SELECT ON tienda_informatica.v_tecnicos_activos TO 'gestor_tienda'@'localh
 
 /*Tarea 4: Consistencia y control con WITH CHECK OPTION*/
 /*1. Vista con restricción de dominio: Crea una vista llamada v_articulos_gama_baja basada en la tabla articulos que filtre aquellos productos cuyo precio sea inferior o igual a 50.00 euros (precio <= 50.00), incorporando obligatoriamente la cláusula WITH CHECK OPTION.*/
+CREATE VIEW v_articulos_gama_baja AS 
+	SELECT *
+    FROM articulos
+	WHERE precio <= 50.00
+    WITH CHECK OPTION;
+-- WITH CHECK OPTION sirve para que al crear la vista se cumpla si o si la condicion WHERE
 
 /*2. Demostración técnica: Razona y demuestra técnicamente qué sucede si el administrador o un usuario con permisos intenta realizar una inserción de un artículo con un precio de 75.00 euros a través de dicha vista.*/
 
