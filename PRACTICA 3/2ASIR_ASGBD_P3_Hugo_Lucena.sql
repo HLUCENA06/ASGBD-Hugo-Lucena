@@ -33,10 +33,16 @@ ALTER USER 'auditor_externo'@'%' DEFAULT ROLE 'rol_consultor';
 /*Tarea 3: Seguridad mediante Vistas y Privilegios Granulares
 Para proteger la información interna y confidencial de la empresa, el usuario gestor_tienda bajo ningún concepto debe tener acceso directo a la tabla completa de técnicos. Se debe proceder de la siguiente manera:*/
 /*1. Creación de la vista de enmascaramiento: Crea una vista llamada v_tecnicos_activos que muestre únicamente el identificador, el nombre y la especialidad de los técnicos, ocultando por completo la columna de salarios.*/
+CREATE VIEW v_tecnicos_activos AS 
+	SELECT id, nombre, especialidad
+    FROM tecnicos;
+-- La vista funciona como otra tabla cuyas unicas tablas son las que establezco en el AS
 
 /*2. Privilegio granular: Concede al usuario gestor_tienda permisos exclusivos de consulta sobre dicha vista v_tecnicos_activos.*/
+GRANT SELECT ON tienda_informatica.v_tecnicos_activos TO 'gestor_tienda'@'localhost';
 
 /*3. Prueba de denegación: Comprueba y documenta qué ocurre si el usuario gestor_tienda intenta consultar directamente la tabla base tecnicos.*/
+-- Al intentar seleccionar la tabla tecnicos (No la vista, la tabla base) sale el siguiente error: ERROR 1142 (42000): SELECT command denied to user 'gestor_tienda'@'localhost' for table 'tecnicos'
 
 
 /*Tarea 4: Consistencia y control con WITH CHECK OPTION*/
