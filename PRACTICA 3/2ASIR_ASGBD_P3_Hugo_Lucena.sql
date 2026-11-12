@@ -55,11 +55,15 @@ CREATE VIEW v_articulos_gama_baja AS
 -- WITH CHECK OPTION sirve para que al crear la vista se cumpla si o si la condicion WHERE
 
 /*2. Demostración técnica: Razona y demuestra técnicamente qué sucede si el administrador o un usuario con permisos intenta realizar una inserción de un artículo con un precio de 75.00 euros a través de dicha vista.*/
-
+/*Al intentar insertar un artículo de mas de 75 € a través de v_articulos_gama_baja,
+se rechaza la operación devolviendo el error 1369*/
 
 /*Tarea 5: Auditoría, Resolución de Incidencias y Reflexión Crítica (Apartado de Análisis y Razonamiento)*/
 /*1. Auditoría de privilegios efectivos: Imagina que el auditor externo reporta que no puede ver los cambios recientes en la base de datos. Escribe la sentencia SQL que utilizarías para comprobar los privilegios exactos y los roles activos que tiene asignados en este momento el usuario auditor_externo desde el servidor.*/
+SHOW GRANTS FOR 'auditor_externo'@'%';
 
 /*2. Reflexión sobre el Principio de Mínimo Privilegio: Explica razonadamente por qué en un entorno de producción nunca se debe otorgar el permiso ALL PRIVILEGES a los usuarios finales de una aplicación web o de gestión, y qué relación directa guarda esta mala práctica con las inyecciones SQL o brechas de seguridad.*/
+/*Si se otorga ALL PRIVILEGES a un usuario y esta sufre un ataque o un robo de credenciales, el atacante obtendrá control total sobre el servidor de base de datos*/
 
 /*3. Análisis de comportamiento del CHECK OPTION: Si un analista junior elimina la cláusula WITH CHECK OPTION en la v_articulos_gama_baja pensando que "mejora el rendimiento de las consultas", ¿qué brecha lógica o inconsistencia de datos podría introducir en la tabla base articulos al insertar registros mediante la vista? Justifica tu respuesta.*/
+/*Si se elimina WITH CHECK OPTION, los usuarios con permisos sobre la vista 'v_articulos_gama_baja' podrán insertar o actualizar productos con precios superiores a 50€ a través de ella. El dato se inserta realmente en la tabla base 'articulos', pero desaparece inmediatamente de la vista porque no cumple el filtro WHERE precio <= 50.00
